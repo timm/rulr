@@ -4,7 +4,7 @@
 @import "{{ site.theme }}";
 
 
-.markdown-body {
+body {
     font-size: 2px;
     line-height: 1;
     word-wrap: break-word;
