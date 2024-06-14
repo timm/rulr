@@ -8,9 +8,6 @@ Pragmatically, that is not possible. So please, humour us, at least once
 set yourself up with the latest version of Python running on Github
 codespaces.
 
-> [!TIP]
-> Watch the demo on this in lectures
-
 **SUBMIT** the following screen snap from your own brower.
 
 <img src="img/installed.png">
