@@ -1,1 +1,40 @@
+plugins:
+  - jekyll-remote-theme
+
 remote_theme: poole/poole
+
+# Setup
+title: "lite"
+tagline: "A little lite AI"
+url: https://timm.github.io/lite/
+paginate: 1
+baseurl: ""
+permalink: pretty
+
+# Gems
+plugins:
+  - jekyll-gist
+  - jekyll-paginate
+  - jekyll-seo-tag
+
+# Optimize Jekyll
+exclude:
+  - .editorconfig
+  - .git
+  - .jekyll-cache
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE.md
+  - README.md
+
+sass:
+  sass_dir: _sass
+  style: :compressed
+
+# Options
+
+# Specify the author for blog posts
+author:
+  name: Tim Menzoes
+  url: https://timm.fyi
+  email: timm@ieee.org
