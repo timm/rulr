@@ -1,2 +1,3 @@
-title: "A little lite AI"
-theme: jekyll-theme-minimal
+title: [A little lite AI]
+description: [This site documents principles of lightweight local learning.]
+remote_theme: pages-themes/minimal@v0.2.0
