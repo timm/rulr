@@ -1,4 +1,3 @@
-# A Little Lite AI
 
 Contents:
 
