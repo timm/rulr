@@ -1,15 +1,12 @@
 theme: minima
 title: A little lite AI
+author: Tim Menzies
 email: timm@ieee.org
 description: >- # this means to ignore newlines until "baseurl:"
   Sure, you can write your own AI. Easy!
 url: "http://github.io/timm/lite" # the base hostname & protocol for your site, e.g. http://example.com
 
 
-title: A little lite AI
-author:
-  name: timm
-  email: itimm@ieee.org
 
 # The `>` after `description:` means to ignore line-breaks until next key.
 # If you want to omit the line-break after the end of text, use `>-` instead.
@@ -57,7 +54,7 @@ minima:
   #date_format: "%b-%d-%Y"
 
   # Generate social links in footer.
-  social_links:
+ social_links:
   #  - { platform: devto,          user_url: "https://dev.to/jekyll" }
   #  - { platform: dribbble,       user_url: "https://dribbble.com/jekyll" }
   #  - { platform: facebook,       user_url: "https://www.facebook.com/jekyll" }
