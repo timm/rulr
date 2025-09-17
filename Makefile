@@ -1,28 +1,62 @@
 SHELL     := bash
 MAKEFLAGS += --warn-undefined-variables
 .SILENT:
+.ONESHELL:
+
+LOUD = \033[1;34m#
+HIGH = \033[1;33m#
+SOFT = \033[0m#
 
 Top=$(shell git rev-parse --show-toplevel)
+Tmp ?= $(HOME)/tmp 
+Data=$(Top)/../moot/optimize
 
-help      :  ## show help
-		awk 'BEGIN {FS = ":.*?## "; print "\nmake [WHAT]" } \
-	                /^[^[:space:]].*##/ {printf "   \033[36m%-18s\033[0m : %s\n", $$1, $$2} ' \
-	        $(MAKEFILE_LIST)
-		awk 'sub(/#\. /,"") { printf "  \033[36m%-20s\033[0m \n", $$0}' Makefile
+help: ## show help.
+	@gawk '\
+		BEGIN {FS = ":.*?##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nHelp:\n"}  \
+    /^[a-z0-9A-Z_%\.\/-]+:.*?##/ {printf("  \033[36m%-15s\033[0m %s\n", $$1, $$2) | "sort" } \
+	' $(MAKEFILE_LIST)
 
-pull    : ## download
+pull: ## update from main
 	git pull
 
-push    : ## save
-	echo -n "> Say, why are you saving? "; read x; git commit -am "$$x"; git push; git status
+push:  ## commit to main
+	echo -en "$(LOUD)Why this push? $(SOFT)" 
+	read x ; git commit -am "$$x" ;  git push
+	git status
 
-md=$(wildcard $(Top)/docs/[A-Z]*.md)
-lua=$(md:.md=.lua)
+sh: ## run custom shell
+	clear; tput setaf 3; cat $(Top)/etc/hi.txt; tput sgr0
+	sh $(Top)/etc/bash.sh
 
-doco: $(subst docs,tests,$(lua))
+setup: ## initial setup - clone moot data
+	[ -d $(Data) ] || git clone http://github.com/timm/moot $(Top)/../moot
 
-$(Top)/tests/%.lua : $(Top)/docs/%.md
-	gawk 'BEGIN { code=0 } sub(/^```.*/,"")  \
-			  { code = 1 - code } \
-							{ print (code ? "" : "-- ") $$0 }'  $^ > $@
-	luac -p $@
+install: ## install in development mode (when ready)
+	pip install -e .
+
+clean:  ## find and delete any __pycache__ dirs
+	files="$$(find $(Top) -name __pycache__ -type d)"; \
+	for f in $$files; do rm -rf "$$f"; done
+
+docs/index.html: rulr/rulr.py
+	mkdir -p $(Top)/docs
+	touch $(Top)/docs/.nojekyll
+	pdoc3 --html --force -o $(Top)/docs $<
+	mv $(Top)/docs/rulr.html $@
+
+docs/%.html: rulr/%.py
+	mkdir -p $(Top)/docs; 
+	touch $(Top)/docs/.nojekyll; 
+	python3 -B $(Top)/etc/prep.py $^ > $(Top)/docs/$*.py 
+	cd $(Top)/docs; pycco -d $(Top)/docs $*.py
+	echo "p {text-align: right;}" >> $(Top)/docs/pycco.css
+	echo "pre {font-size: x-small;}" >> $(Top)/docs/pycco.css
+
+~/tmp/dist.log:  ## run on many files
+	$(MAKE) todo=dist files="$(Top)/../moot/optimize/*/*.csv" _run | tee $@ 
+
+_run:
+	@mkdir -p ~/tmp
+	time ls -r $(files) \
+	  | xargs -P 24 -n 1 -I{} sh -c 'cd $(Top)/rulr; python3 -B rulrtest.py -f "{}" --$(todo)'

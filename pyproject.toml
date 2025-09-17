@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rulr"
+version = "0.1.0"
+description = "Fast rule learner"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.7"
+license = { text = "MIT" }
+authors = [{ name = "Tim Menzies", email = "timm@ieee.org" }]
+urls = {
+  Homepage = "https://github.com/timm/rulr",
+  Documentation = "https://timm.github.io/rulr/",
+  Repository = "https://github.com/timm/rulr",
+  "License (MIT)" = "https://github.com/timm/rulr/blob/main/LICENSE.md",
+  Issues = "https://github.com/timm/rulr/issues"
+}
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Education"
+]
+dependencies = []
+
+[project.scripts]
+rulr = "rulr.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["rulr*"]
+
