@@ -38,7 +38,7 @@ def label(row:Row) -> Row:
 def Num(at=0,s=" ") -> o: 
   "Create a numeric column summarizer"
   return o(it=Num, at=at, txt=s, n=0, mu=0, m2=0, sd=0, 
-           hi=-big, lo=big, more = 0 if s[-1] == "-" else 1)
+           hi=-big, lo=big, best = 0 if s[-1] == "-" else 1)
 
 def Sym(at=0,s=" ") -> o: 
   "Create a symbolic column summarizer"
@@ -97,19 +97,40 @@ def add(x: o, v:Any, inc=1, zap=False) -> Any:
   else: raise TypeError(f"cannot add to {type(x)}")
   return v
 
-def discretize(sym1, sym2):
+def discretize(sym1, sym2, eps=0.01,minSize=4):
   if sym1.it is Sym:
     for k in (sym1.has | sym2.has):  
       yield sym1.has.get(k, 0), True, (k, k)
       yield sym2.has.get(k, 0), False, (k, k)
   else:
-    xy = [(better, True)  for better in sym1._all] + [
-          (bad,    False) for bad    in j._all]
-    tmp = div(xy, tooSmall=i.sd() * MY.cohen, width=len(xy)**MY.size)
-    for bin in merge(tmp):
+    xy = [(y,1) for y in sym1.has] + [(n,0) for n  in sym2.has]
+    for bin in merge(bins(xy, eps=eps, minSize=minSize)):
       for klass, n in bin.also.seen.items():
         yield n, klass, (bin.down, bin.up)
 
+### when to grow to guc?
+def bins(xy, eps=0.01, minSize=4):
+  xys = sorted(xy)
+  out = [Num()]
+  for j, (x, y) in enumerate(xy):
+    if j < len(xy) - minSize:
+        if x != xy[j + 1][0]:
+          if out[-1].hi - out[-1].lo > eps:
+            now = Bin(down=now.up, up=x)
+            out += [now]
+    now.up = x
+    now.also.add(y)
+  out[0].lo = -big
+  out[-1].hi = big
+  return out
+
+def merged(n1,n2, eps,minSize):
+  if n1.n < minSize or n2.n < minSize or abs(n1.lo - n2.hi) < eps: 
+    return merge(n1,n2)
+  n12 = merge(n1,n2)
+  if div(n12) <= (n1.n*div(n1) + n2.n*div(n2))/ (n1.n + n2.n):
+    return n12
+        
 #--------------------------------------------------------------------
 def norm(num:Num, v:float) -> float:  
   "Normalize a value to 0..1 range"
@@ -142,7 +163,7 @@ def dist(src) -> float:
 
 def disty(data:Data, row:Row) -> float:
   "Distance from row to best y-values"
-  return dist(abs(norm(c, row[c.at]) - c.more) for c in data.cols.y)
+  return dist(abs(norm(c, row[c.at]) - c.best) for c in data.cols.y)
 
 def distysort(data:Data,rows=None) -> list[Row]:
   "Sort rows by distance to best y-values"
