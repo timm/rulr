@@ -1,67 +1,137 @@
-#---- local config --------------------------------------------------
-
-X=rulr
-
-~/tmp/dist.log:  ## run on many files
-	$(MAKE) todo=dist files="$(Top)/../moot/optimize/*/*.csv" _run | tee $@ 
-
-setup: ## initial setup - clone moot data
-	[ -d $(Data) ] || git clone http://github.com/timm/moot $(Top)/../moot
-
-Data=$(Top)/../moot/optimize
-
-#---- general stuff -------------------------------------------------
+#---- header : do not move -------------------------------------------
 SHELL     := bash
 MAKEFLAGS += --warn-undefined-variables
-.SILENT:
 .ONESHELL:
 
-LOUD = \033[1;34m#
-HIGH = \033[1;33m#
-SOFT = \033[0m#
+# Define phony targets (targets that don't create files)
+.PHONY: help setup pull push sh install clean docs test
 
-Top=$(shell git rev-parse --show-toplevel)
-Tmp ?= $(HOME)/tmp 
+#---- variables ------------------------------------------------------
+X         := rulr
+Top       := $(shell git rev-parse --show-toplevel)
+Tmp       ?= $(HOME)/tmp
+Data      := $(Top)/../moot/optimize
+LogFile   := $(Tmp)/dist.log
 
-help: ## show help.
+# Color definitions for output
+LOUD      := \033[1;34m#
+HIGH      := \033[1;33m#
+SOFT      := \033[0m#
+
+#---- help -----------------------------------------------------------
+help: ## show help
+	@printf "\nUsage:\n  make \033[36m<target>\033[0m\n\ntargets:\n"
 	@gawk '\
-		BEGIN {FS = ":.*?##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n\nHelp:\n"}  \
-    /^[a-z0-9A-Z_%\.\/-]+:.*?##/ {printf("  \033[36m%-15s\033[0m %s\n", $$1, $$2) | "sort" } \
-	' $(MAKEFILE_LIST)
+		BEGIN {FS = ":.*?##"} \
+		/^[a-zA-Z0-9_\.\/-]+:.*?##/ {printf("  \033[36m%-15s\033[0m %s\n", $$1, $$2)}' \
+		$(MAKEFILE_LIST) | sort
 
+#---- setup and data management -------------------------------------
+setup: ## initial setup - clone moot data
+	@echo "Setting up data directory..."
+	@if [ ! -d "$(Data)" ]; then \
+		echo "Cloning moot data..."; \
+		git clone http://github.com/timm/moot $(Top)/../moot; \
+	else \
+		echo "Data directory already exists at $(Data)"; \
+	fi
+
+$(Data): setup  ## ensure data directory exists
+
+#---- main targets --------------------------------------------------
+$(LogFile): $(Data) ## run on many files
+	@echo "Running dist on multiple files..."
+	@mkdir -p $(dir $@)
+	$(MAKE) todo=dist files="$(Data)/*/*.csv" _run | tee $@
+
+test: $(Data) ## run tests
+	@echo "Running tests..."
+	cd $(Top)/$(X) && python3 -B $(X)test.py
+
+#---- git operations ------------------------------------------------
 pull: ## update from main
+	@echo "Pulling latest changes..."
 	git pull
+	@echo "Pull completed."
 
-push:  ## commit to main
-	echo -en "$(LOUD)Why this push? $(SOFT)" 
-	read x ; git commit -am "$$x" ;  git push
+push: ## commit and push to main
+	@echo -en "$(LOUD)Why this push? $(SOFT)"
+	@read x && \
+	git add -A && \
+	git commit -m "$$x" && \
+	git push && \
 	git status
 
+#---- development ---------------------------------------------------
 sh: ## run custom shell
-	clear; tput setaf 3; cat $(Top)/etc/hi.txt; tput sgr0
-	sh $(Top)/etc/bash.sh
+	@clear;
+	@tput setaf 3;
+	@cat $(Top)/etc/hi.txt;
+	@tput sgr0;
+	@sh $(Top)/etc/bash.sh 
 
-install: ## install in development mode (when ready)
+install: ## install in development mode
+	@echo "Installing $(X) in development mode..."
 	pip install -e .
+	@echo "Installation completed."
 
-clean:  ## find and delete any __pycache__ dirs
-	files="$$(find $(Top) -name __pycache__ -type d)"; \
-	for f in $$files; do rm -rf "$$f"; done
+clean: ## find and delete any __pycache__ dirs
+	@echo "Cleaning __pycache__ directories..."
+	@find $(Top) -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+	@find $(Top) -name "*.pyc" -delete 2>/dev/null || true
+	@echo "Cleanup completed."
 
-docs/index.html: $X/$X.py
-	mkdir -p $(Top)/docs
-	touch $(Top)/docs/.nojekyll
-	pdoc3 --html --force -o $(Top)/docs $<
-	mv $(Top)/docs/$X.html $@
+#---- documentation ------------------------------------------------
+docs: docs/index.html ## generate documentation
 
-docs/index.html : docs/$X.html   ; cp $^ $@
-docs/%.py       : $(Top)/$X/%.py ; gawk -f $(Top)/etc/pycco0.awk $^ > $@
-docs/%.html     : docs/%.py       
-	pycco -d $(Top)/docs $^
-	echo 'p {text-align:right;} pre {font-size:small;}' >> $(Top)/docs/pycco.css
-	echo 'h2 {border-top: #CCC solid 1px;}'             >> $(Top)/docs/pycco.css
+docs/index.html: docs/$(X).html
+	@echo "Creating main documentation index..."
+	cp $< $@
 
-_run:
-	@mkdir -p ~/tmp
-	time ls -r $(files) \
-	  | xargs -P 24 -n 1 -I{} sh -c 'cd $(Top)/$X; python3 -B ${X}test.py -f "{}" --$(todo)'
+docs/%.py: $(Top)/$(X)/%.py
+	@echo "Converting $< to documentation format..."
+	@mkdir -p docs
+	gawk -f $(Top)/etc/pycco0.awk $< > $@
+
+docs/%.html: docs/%.py
+	@echo "Generating HTML documentation for $<..."
+	pycco -d $(Top)/docs $<
+	@echo 'p {text-align:right;} pre {font-size:small;}' >> $(Top)/docs/pycco.css
+	@echo 'h2 {border-top: #CCC solid 1px;}'             >> $(Top)/docs/pycco.css
+
+#---- internal targets ----------------------------------------------
+_run: ## internal target for parallel execution
+	@echo "Running parallel execution on files: $(files)"
+	@mkdir -p $(Tmp)
+	@if [ -z "$(files)" ]; then \
+		echo "Error: No files specified"; \
+		exit 1; \
+	fi
+	@if [ -z "$(todo)" ]; then \
+		echo "Error: No todo action specified"; \
+		exit 1; \
+	fi
+	time ls $(files) 2>/dev/null | \
+		xargs -P 24 -n 1 -I{} sh -c 'cd $(Top)/$(X) && python3 -B $(X)test.py -f "{}" --$(todo)'
+
+#---- maintenance ---------------------------------------------------
+check-deps: ## check if required tools are available
+	@echo "Checking dependencies..."
+	@command -v git >/dev/null 2>&1 || { echo "git is required but not installed"; exit 1; }
+	@command -v python3 >/dev/null 2>&1 || { echo "python3 is required but not installed"; exit 1; }
+	@command -v gawk >/dev/null 2>&1 || { echo "gawk is required but not installed"; exit 1; }
+	@echo "All dependencies satisfied."
+
+status: ## show project status
+	@echo "Project: $(X)"
+	@echo "Top directory: $(Top)"
+	@echo "Data directory: $(Data)"
+	@echo "Temp directory: $(Tmp)"
+	@echo "Git status:"
+	@git status --short
+
+validate: check-deps $(Data) ## validate project setup
+	@echo "Validating project setup..."
+	@test -d $(Top)/$(X) || { echo "Error: $(X) directory not found"; exit 1; }
+	@test -f $(Top)/$(X)/$(X)test.py || { echo "Error: test file not found"; exit 1; }
+	@echo "Project validation completed successfully."
