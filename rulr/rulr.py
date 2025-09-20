@@ -41,12 +41,16 @@ def Data(src:Iterable):
   return o(cols = cols, 
            rows = shuffle([addCols(cols,row) for row in rows]))
 
-def Cols(arr : list[str]) -> o:
-  all = {c for c,s in enumerate(arr) if s[-1] !=" X"}
+def clone(data, src=[]):
+  return Data([data.cols.names] + src)
+
+def Cols(lst : list[str]) -> o:
+  all = {c for c,s in enumerate(lst) if s[-1] !=" X"}
+  y = {c:lst[c][0] != "-" for c in all if lst[c][-1] in "-+" })
   return o(
-    names = names, all=all,
-    nums  = {c:(big,-big) for c in all if arr[c][0].isupper()},
-    y     = {c:arr[c][0] != "-" for c in all if arr[c][-1] in "-+" })
+    names=names, all=all, y=y,
+    x={c for c in all if c not in y},
+    nums={c:(big,-big) for c in all if lst[c][0].isupper())
 
 def colsAdd(cols,row):
   cols.nums = {c:(min(v,lo),max(v,hi)) 

@@ -11,7 +11,6 @@ X         := rulr
 Top       := $(shell git rev-parse --show-toplevel)
 Tmp       ?= $(HOME)/tmp
 Data      := $(Top)/../moot/optimize
-LogFile   := $(Tmp)/dist.log
 
 # Color definitions for output
 LOUD      := \033[1;34m#
@@ -19,6 +18,7 @@ HIGH      := \033[1;33m#
 SOFT      := \033[0m#
 
 #---- help -----------------------------------------------------------
+# default action for "make" (so always keep this as first rule)
 help: ## show help
 	@printf "\nUsage:\n  make \033[36m<target>\033[0m\n\ntargets:\n"
 	@gawk '\
@@ -39,6 +39,8 @@ setup: ## initial setup - clone moot data
 $(Data): setup  ## ensure data directory exists
 
 #---- main targets --------------------------------------------------
+LogFile   := $(Tmp)/dist.log
+
 $(LogFile): $(Data) ## run on many files
 	@echo "Running dist on multiple files..."
 	@mkdir -p $(dir $@)
@@ -46,7 +48,7 @@ $(LogFile): $(Data) ## run on many files
 
 test: $(Data) ## run tests
 	@echo "Running tests..."
-	cd $(Top)/$(X) && python3 -B $(X)test.py
+	cd $(Top)/$(X) && python3 -B $(X)test.py --all
 
 #---- git operations ------------------------------------------------
 pull: ## update from main
