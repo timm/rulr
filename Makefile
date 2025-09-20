@@ -66,15 +66,12 @@ push: ## commit and push to main
 
 #---- development ---------------------------------------------------
 sh: ## run custom shell
-	@clear;
-	@tput setaf 3;
-	@cat $(Top)/etc/hi.txt;
-	@tput sgr0;
+	@clear; tput setaf 3; cat $(Top)/etc/hi.txt; tput sgr0;
 	@sh $(Top)/etc/bash.sh 
 
 install: ## install in development mode
 	@echo "Installing $(X) in development mode..."
-	pip install -e .
+	cd $(Top); pip install -e .
 	@echo "Installation completed."
 
 clean: ## find and delete any __pycache__ dirs
@@ -105,14 +102,6 @@ docs/%.html: docs/%.py
 _run: ## internal target for parallel execution
 	@echo "Running parallel execution on files: $(files)"
 	@mkdir -p $(Tmp)
-	@if [ -z "$(files)" ]; then \
-		echo "Error: No files specified"; \
-		exit 1; \
-	fi
-	@if [ -z "$(todo)" ]; then \
-		echo "Error: No todo action specified"; \
-		exit 1; \
-	fi
 	time ls $(files) 2>/dev/null | \
 		xargs -P 24 -n 1 -I{} sh -c 'cd $(Top)/$(X) && python3 -B $(X)test.py -f "{}" --$(todo)'
 
