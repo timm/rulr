@@ -151,13 +151,16 @@ def shuffle(lst:list) -> list:
   "Shuffle a list, in place"
   random.shuffle(lst); return lst
 
+Maybe={'True' :True, 'true' :True, 'Y':True, 'y':True,
+       'False':False,'false':False,'N':False,'n':False}
+
 def coerce(s:str) -> Atom:
   "Coerce a string to int, float, bool, or trimmed string"
   for fn in [int,float]:
     try: return fn(s)
     except Exception as _: pass
   s = s.strip()
-  return {'True':True,'False':False}.get(s,s)
+  return Maybe.get(s,s)
 
 def csv(file: str ) -> Iterator[Row]:
   "Returns rows of a csv file."
