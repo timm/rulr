@@ -102,22 +102,21 @@ def bestSym(name,x,dict1: dict[str,int], dict2: dict[str,int], *_):
 
 def think(data: Data):
   "Make rules from best range of each x column from a few labeled rows."
-  for _ in range(5):
-    rows = data.rows = shuffle(data.rows)
-    xy,x = [label(row) for row in rows[:the.Budget]], rows[the.Budget:]
-    xy.sort(key = lambda r: disty(data,r))
-    cut = int(the.Budget**.5)
-    best,rest = xy[:cut], xy[cut:]
-    ranges = []
-    for x in data.cols.x: 
-      catch1 = [] if x in data.cols.nums else {}
-      catch2 = [] if x in data.cols.nums else {}
-      [add(catch1,row[x]) for row in best]
-      [add(catch2,row[x]) for row in rest]
-      ranges += [(bestNum if x in data.cols.nums else bestSym)(
-                 data.cols.names[x],x,catch1,catch2)]
-    for rule in subsets(ranges):
-      yield score(rule,best,rest)
+  rows = data.rows = shuffle(data.rows)
+  xy,x = [label(row) for row in rows[:the.Budget]], rows[the.Budget:]
+  xy.sort(key = lambda r: disty(data,r))
+  cut = int(the.Budget**.5)
+  best,rest = xy[:cut], xy[cut:]
+  ranges = []
+  for x in data.cols.x: 
+    catch1 = [] if x in data.cols.nums else {}
+    catch2 = [] if x in data.cols.nums else {}
+    [add(catch1,row[x]) for row in best]
+    [add(catch2,row[x]) for row in rest]
+    ranges += [(bestNum if x in data.cols.nums else bestSym)(
+               data.cols.names[x],x,catch1,catch2)]
+  for rule in subsets(ranges):
+    yield score(rule,best,rest)
    
 def score(rule,best,rest):
   "Return harmonic mean of recall and false alarm."
@@ -210,8 +209,10 @@ def eg__the(): print(the)
 def eg__data(): print(Data(csv(the.file)).cols)
 
 def eg__think():
-  for g,rule in sorted(think(Data(csv(the.file)))): 
-    print(f"{g:3f}",rule)
+  data = Data(csv(the.file))
+  for _ in range(5):
+    for g,rule in sorted(think(data)):
+      print(f"{g:3f}",rule)
 
 ### Start-up --------------------------------------------------------
 the = o(**{k:coerce(v) for k,v in re.findall(r"(\w+)=(\S+)",__doc__)})
