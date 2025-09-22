@@ -16,7 +16,7 @@ Options:
     -f file=../../moot/optimize/misc/auto93.csv  data file   
    
 """
-from typing import Any, Iterator, Iterable
+from typing import Iterator, Iterable
 import traceback, random, time, math, sys, re
    
 sys.dont_write_bytecode = True
@@ -50,7 +50,7 @@ def label(row:Row) -> Row:
 ### Constructors -----------------------------------------------------
 def Data(src:Iterable) -> o:
   "Create a data from src."
-  rows  = iter(src)
+  rows = iter(src)
   cols = Cols(next(rows))
   return o(cols = cols, 
            rows = shuffle([colsAdd(cols,row) for row in rows]))
