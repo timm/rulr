@@ -9,21 +9,24 @@ Options:
     
     -h             show help   
     -B Budget=30   when growing theory, how many labels?      
-    -C Check=5     budget for checking learned model   
     -F Few=64      sample size of data random sampling     
+    -b bins=20     divisions of numerics (max-min)/b
+    -d delta=0.35  Cohen's delta. ignore deltas less than d*sd
     -p p=2         distance coeffecient   
+    -r repeats=10  loop counter for rule generation
     -s seed=1701   random number seed      
     -f file=../../moot/optimize/misc/auto93.csv  data file   
    
 """
-from typing import Iterator, Iterable
-import traceback, random, time, math, sys, re
+from typing import Iterator, Iterable, Any
+import random, time, math, sys, re
    
 sys.dont_write_bytecode = True
    
 Qty  = int | float
 Atom = Qty | str | bool
 Row  = list[Atom]
+Rows = list[Row]
    
 big  = 1e32
     
@@ -75,50 +78,62 @@ def colsAdd(cols:Cols, row:Row) -> Row:
   return row
 
 ### Range generation -------------------------------------------------
-def bestNum(name,x,nums1, nums2, n=20, d=0.35):
-  "Find the x1,x2 range that most selects for nums1 and least selects for nums2."
-  nums1.sort(); nums2.sort();
-  a  = sorted(nums1 + nums2)
-  sd = stdev(a)
-  steps = sorted(set(a[int(i/(n-1)*(len(a)-1))] for i in range(n)))
-  s1,s2,n1,n2 = sorted(nums1), sorted(nums2), len(nums1), len(nums2)
-  mass  = lambda s, x1, x2, n: (chop(s, x2, True) - chop(s, x1)) / n
-  best, out = -1, None
+def bestNum(name:str, x:int, good:list[Qty], bad:list[Qty]) -> tuple:
+  "Find numeric range that best separates good from bad."
+  good, bad  = sorted(good), sorted(bad)
+  all_vals   = sorted(good + bad)
+  steps      = sorted(set(all_vals))
+  sd, n1, n2 = stdev(all_vals), len(good), len(bad)
+  mass       = lambda nums, x1, x2, n: (chop(nums, x2, True) - chop(nums, x1))/n
+  best, out  = -1, None
   for i in range(len(steps)):
     for j in range(i+1, len(steps)):
       x1, x2 = steps[i], steps[j]
-      if x2 - x1 >= d * sd:
-        delta = mass(s1, x1, x2, n1) - mass(s2, x1, x2, n2)
+      if x2 - x1 >= the.delta * sd:
+        delta = mass(good, x1, x2, n1) - mass(bad, x1, x2, n2)
         if delta > best: best, out = delta, (x1, x2)
-  return round(best,3), name,x, out
+  return round(best, 3), name, x, out
 
-def bestSym(name,x,dict1: dict[str,int], dict2: dict[str,int], *_): 
+def bestSym(name,x,dict1: dict[str,int], dict2: dict[str,int]): 
   "Find the value that most selects for dict1 and least selects for dict2."
   N     = sum(dict1.values()) + sum(dict2.values())
   delta = lambda v: dict1.get(v,0)/N - dict2.get(v,0)/N
   return max((round(delta(v),3),name,x,(v,v)) for v in dict1)
 
 ### Rule generation -------------------------------------------------
-
-def think(data: Data):
-  "Make rules from best range of each x column from a few labeled rows."
-  rows = data.rows = shuffle(data.rows)
-  xy,x = [label(row) for row in rows[:the.Budget]], rows[the.Budget:]
-  xy.sort(key = lambda r: disty(data,r))
-  cut = int(the.Budget**.5)
-  best,rest = xy[:cut], xy[cut:]
-  ranges = []
-  for x in data.cols.x: 
-    catch1 = [] if x in data.cols.nums else {}
-    catch2 = [] if x in data.cols.nums else {}
-    [add(catch1,row[x]) for row in best]
-    [add(catch2,row[x]) for row in rest]
-    ranges += [(bestNum if x in data.cols.nums else bestSym)(
-               data.cols.names[x],x,catch1,catch2)]
+def think(data: Data) -> Iterator[tuple]:
+  "Generate scored rules from labeled data."
+  best, rest = bestRest(data)
+  ranges = [makeRange(data, col, best, rest) for col in data.cols.x]
   for rule in subsets(ranges):
-    yield score(rule,best,rest)
-   
-def score(rule,best,rest):
+    yield score(rule, best, rest)
+
+def makeRange(data:Data, x:int, best, rest) -> tuple:
+  "Find discriminating range for column x."
+  def add(col,v):
+    if type(col) is dict: col[v] = 1 + col.get(v,0)
+    else: col += [int(v/r)*r]  # avoid spurious deltas
+
+  if x in data.cols.nums:
+     lo,hi = data.cols.nums[x]
+     r = (hi-lo)/the.bins + 1e-32
+     values1,values2= [],[]
+  else:
+     values1,values2= {},{}
+  [add(values1, v) for row in best if (v:=row[x]) != "?"]
+  [add(values2, v) for row in rest if (v:=row[x]) != "?"]
+  return (bestNum if x in data.cols.nums else bestSym)(
+          data.cols.names[x], x, values1, values2)
+
+def bestRest(data: Data) -> tuple[Rows,Rows]:
+  "Return best and rest training groups."
+  rows = shuffle(data.rows)
+  labeled = [label(row) for row in rows[:the.Budget]]
+  labeled.sort(key=lambda r: disty(data, r))
+  cut = int(the.Budget**.5)
+  return labeled[:cut], labeled[cut:]
+
+def score(rule:tuple, best:list, rest:list) -> float:
   "Return harmonic mean of recall and false alarm."
   best1  = [row for row in best if selects(rule,row)]
   rest1  = [row for row in rest if selects(rule,row)]
@@ -126,11 +141,11 @@ def score(rule,best,rest):
   pf     = len(rest1) / len(rest)
   return 2*recall*(1-pf) / (recall + (1 - pf)), rule
 
-def selects(rule,row):
+def selects(rule: tuple, row:Row) -> bool:
   "Returns true if rule selects for row."
   return all(select(row,x,lo,hi) for _,_,x,(lo,hi) in rule)
 
-def select(row,x,lo,hi):
+def select(row:Row, x:int, lo:Any, hi:Any) -> bool:
   "Returns true if range selects for row."
   if (v:=row[x])=="?": return True
   return lo <= v <= hi
@@ -150,6 +165,7 @@ def shuffle(lst:list) -> list:
   "Shuffle a list, in place"
   random.shuffle(lst); return lst
 
+# What is "true" (used by the coerce function)?
 Maybe={'True' :True, 'true' :True, 'Y':True, 'y':True,
        'False':False,'false':False,'N':False,'n':False}
 
@@ -168,11 +184,11 @@ def csv(file: str ) -> Iterator[Row]:
       if (line := line.split("%")[0]):
         yield [coerce(s) for s in line.split(",")]
 
-def mid(a): 
+def mid(a: list[Qty]) -> float: 
   "Return average."
   return sum(a) / len(a)
 
-def stdev(a):
+def stdev(a: list[Qty]) -> float:
   "Return standard deviation."
   l=len(a)
   if l<2 :          return 0
@@ -180,19 +196,13 @@ def stdev(a):
   if l<10: n=l//4;  return (a[3*n] - a[n]) / 1.35
   else   : n=l//10; return (a[9*n] - a[n]) / 2.56
 
-def subsets(xs):
+def subsets(xs: list) -> list[list]:
   "Return all subsets of xs."
   out = []
   for x in xs: out += [s+[x] for s in out] + [[x]]
   return out
 
-def add(col,x):
-  "Increment dictionaries or lists with x."
-  if x != "?":
-    if type(col) is dict: col[x] = 1 + col.get(x,0)
-    else: col += [x] 
-
-def chop(a, x, inclusive=False):
+def chop(a:list, x:Any, inclusive=False) -> int:
   "Returns number of points <= x (if inclusive) or < x (otherwise)."
   l, r = 0, len(a)
   while l < r:
@@ -210,19 +220,22 @@ def eg__data(): print(Data(csv(the.file)).cols)
 
 def eg__think():
   data = Data(csv(the.file))
-  for _ in range(5):
+  for _ in range(the.repeats):
     for g,rule in sorted(think(data)):
       print(f"{g:3f}",rule)
 
 ### Start-up --------------------------------------------------------
 the = o(**{k:coerce(v) for k,v in re.findall(r"(\w+)=(\S+)",__doc__)})
-   
-if __name__ == "__main__":
+
+def rulrMain(settings, funs):
   for n,s in enumerate(sys.argv):
-    if (fn := globals().get(f"eg{s.replace('-', '_')}")):
-      random.seed(the.seed)
-      fn()
-    else:
-      for key in the:
-        if s=="-"+key[0]: 
-          the[key] = coerce(sys.argv[n+1])
+   if (fn := funs.get(f"eg{s.replace('-', '_')}")):
+     random.seed(settings.seed)
+     fn()
+   else:
+     for key in settings:
+       if s=="-"+key[0]: 
+         settings[key] = coerce(sys.argv[n+1])
+
+if __name__ == "__main__": rulrMain(the,globals())
+  
