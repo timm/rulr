@@ -32,8 +32,8 @@
 </code></pre>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Iterable</span>
-<span class="kn">import</span> <span class="nn">traceback</span><span class="o">,</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">math</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">re</span>
+      <div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span><span class="o">,</span><span class="w"> </span><span class="nn">random</span><span class="o">,</span><span class="w"> </span><span class="nn">time</span><span class="o">,</span><span class="w"> </span><span class="nn">math</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span><span class="o">,</span><span class="w"> </span><span class="nn">re</span>
    
 <span class="n">sys</span><span class="o">.</span><span class="n">dont_write_bytecode</span> <span class="o">=</span> <span class="kc">True</span>
    
@@ -65,12 +65,12 @@
       <p>pretty print dicts with short float displays and quoted strings</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
   <span class="k">match</span> <span class="n">x</span><span class="p">:</span>
-   <span class="k">case</span> <span class="nb">dict</span><span class="p">():</span>  <span class="k">return</span> <span class="s2">&quot;{&quot;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;:</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">show</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;}&quot;</span>
-   <span class="k">case</span> <span class="nb">float</span><span class="p">():</span> <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span>
-   <span class="k">case</span> <span class="nb">str</span><span class="p">():</span>   <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
-   <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span></pre></div>
+    <span class="k">case</span> <span class="nb">dict</span><span class="p">()</span> <span class="p">:</span> <span class="n">x</span><span class="o">=</span> <span class="s2">&quot;{&quot;</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;:</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">show</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;}&quot;</span>
+    <span class="k">case</span> <span class="nb">float</span><span class="p">():</span> <span class="n">x</span><span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">case</span> <span class="nb">str</span><span class="p">()</span>  <span class="p">:</span> <span class="n">x</span><span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+  <span class="k">return</span> <span class="n">x</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -82,7 +82,7 @@
       <p>Dictionaries that support x.key.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">class</span> <span class="nc">o</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">class</span><span class="w"> </span><span class="nc">o</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
   <span class="fm">__getattr__</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="fm">__getitem__</span>
   <span class="fm">__setattr__</span> <span class="o">=</span> <span class="nb">dict</span><span class="o">.</span><span class="fm">__setitem__</span>
   <span class="fm">__repr__</span>    <span class="o">=</span> <span class="n">show</span></pre></div>
@@ -109,7 +109,7 @@
       <p>Stub. Ensure row is labeled.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="n">row</span><span class="p">:</span><span class="n">Row</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Row</span><span class="p">:</span> 
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">label</span><span class="p">(</span><span class="n">row</span><span class="p">:</span><span class="n">Row</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Row</span><span class="p">:</span> 
   <span class="k">return</span> <span class="n">row</span></pre></div>
     </div>
   </div>
@@ -134,7 +134,7 @@
       <p>Create a data from src.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">Data</span><span class="p">(</span><span class="n">src</span><span class="p">:</span><span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="p">:</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">Data</span><span class="p">(</span><span class="n">src</span><span class="p">:</span><span class="n">Iterable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="p">:</span>
   <span class="n">rows</span>  <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
   <span class="n">cols</span> <span class="o">=</span> <span class="n">Cols</span><span class="p">(</span><span class="nb">next</span><span class="p">(</span><span class="n">rows</span><span class="p">))</span>
   <span class="k">return</span> <span class="n">o</span><span class="p">(</span><span class="n">cols</span> <span class="o">=</span> <span class="n">cols</span><span class="p">,</span> 
@@ -150,7 +150,7 @@
       <p>Replicate sttucture of data. Optionally, add rows.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="n">data</span><span class="p">:</span><span class="n">Data</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="p">[])</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="p">:</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">clone</span><span class="p">(</span><span class="n">data</span><span class="p">:</span><span class="n">Data</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="p">[])</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="p">:</span>
   <span class="k">return</span> <span class="n">Data</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">names</span><span class="p">]</span> <span class="o">+</span> <span class="n">rows</span><span class="p">)</span></pre></div>
     </div>
   </div>
@@ -163,7 +163,7 @@
       <p>From list of names, build the columns.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">Cols</span><span class="p">(</span><span class="n">lst</span> <span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="p">:</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">Cols</span><span class="p">(</span><span class="n">lst</span> <span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="p">:</span>
   <span class="nb">all</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span><span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span> <span class="k">if</span> <span class="n">s</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;X&quot;</span><span class="p">}</span>
   <span class="n">y</span>   <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:</span><span class="n">lst</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;-&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">all</span> <span class="k">if</span> <span class="n">lst</span><span class="p">[</span><span class="n">c</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="s2">&quot;-+&quot;</span> <span class="p">}</span>
   <span class="k">return</span> <span class="n">o</span><span class="p">(</span>
@@ -181,7 +181,7 @@
       <p>Update the colum summaries from row.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">colsAdd</span><span class="p">(</span><span class="n">cols</span><span class="p">:</span><span class="n">Cols</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">Row</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Row</span><span class="p">:</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">colsAdd</span><span class="p">(</span><span class="n">cols</span><span class="p">:</span><span class="n">Cols</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">Row</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Row</span><span class="p">:</span>
   <span class="n">cols</span><span class="o">.</span><span class="n">nums</span> <span class="o">=</span> <span class="p">{</span><span class="n">c</span><span class="p">:(</span><span class="nb">min</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">lo</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">hi</span><span class="p">))</span> 
                <span class="k">for</span> <span class="n">c</span><span class="p">,(</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">)</span> <span class="ow">in</span> <span class="n">cols</span><span class="o">.</span><span class="n">nums</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="o">:=</span><span class="n">row</span><span class="p">[</span><span class="n">c</span><span class="p">])</span><span class="o">!=</span><span class="s2">&quot;?&quot;</span><span class="p">}</span>
   <span class="k">return</span> <span class="n">row</span></pre></div>
@@ -208,7 +208,7 @@
       <p>Find the x1,x2 range that most selects for nums1 and least selects for nums2.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">bestNum</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">nums1</span><span class="p">,</span> <span class="n">nums2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.35</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">bestNum</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">nums1</span><span class="p">,</span> <span class="n">nums2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.35</span><span class="p">):</span>
   <span class="n">nums1</span><span class="o">.</span><span class="n">sort</span><span class="p">();</span> <span class="n">nums2</span><span class="o">.</span><span class="n">sort</span><span class="p">();</span>
   <span class="n">a</span>  <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">nums1</span> <span class="o">+</span> <span class="n">nums2</span><span class="p">)</span>
   <span class="n">sd</span> <span class="o">=</span> <span class="n">stdev</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
@@ -234,7 +234,7 @@
       <p>Find the value that most selects for dict1 and least selects for dict2.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">bestSym</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">dict1</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">int</span><span class="p">],</span> <span class="n">dict2</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">int</span><span class="p">],</span> <span class="o">*</span><span class="n">_</span><span class="p">):</span> 
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">bestSym</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">dict1</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">int</span><span class="p">],</span> <span class="n">dict2</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span><span class="nb">int</span><span class="p">],</span> <span class="o">*</span><span class="n">_</span><span class="p">):</span> 
   <span class="n">N</span>     <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dict1</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">dict2</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
   <span class="n">delta</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">dict1</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">N</span> <span class="o">-</span> <span class="n">dict2</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">/</span><span class="n">N</span>
   <span class="k">return</span> <span class="nb">max</span><span class="p">((</span><span class="nb">round</span><span class="p">(</span><span class="n">delta</span><span class="p">(</span><span class="n">v</span><span class="p">),</span><span class="mi">3</span><span class="p">),</span><span class="n">name</span><span class="p">,</span><span class="n">x</span><span class="p">,(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dict1</span><span class="p">)</span></pre></div>
@@ -261,23 +261,22 @@
       <p>Make rules from best range of each x column from a few labeled rows.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">think</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Data</span><span class="p">):</span>
-  <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
-    <span class="n">rows</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
-    <span class="n">xy</span><span class="p">,</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">label</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">[:</span><span class="n">the</span><span class="o">.</span><span class="n">Budget</span><span class="p">]],</span> <span class="n">rows</span><span class="p">[</span><span class="n">the</span><span class="o">.</span><span class="n">Budget</span><span class="p">:]</span>
-    <span class="n">xy</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">disty</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">r</span><span class="p">))</span>
-    <span class="n">cut</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">Budget</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
-    <span class="n">best</span><span class="p">,</span><span class="n">rest</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[:</span><span class="n">cut</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="n">cut</span><span class="p">:]</span>
-    <span class="n">ranges</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">x</span><span class="p">:</span> 
-      <span class="n">catch1</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">nums</span> <span class="k">else</span> <span class="p">{}</span>
-      <span class="n">catch2</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">nums</span> <span class="k">else</span> <span class="p">{}</span>
-      <span class="p">[</span><span class="n">add</span><span class="p">(</span><span class="n">catch1</span><span class="p">,</span><span class="n">row</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">best</span><span class="p">]</span>
-      <span class="p">[</span><span class="n">add</span><span class="p">(</span><span class="n">catch2</span><span class="p">,</span><span class="n">row</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rest</span><span class="p">]</span>
-      <span class="n">ranges</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">bestNum</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">nums</span> <span class="k">else</span> <span class="n">bestSym</span><span class="p">)(</span>
-                 <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="n">x</span><span class="p">],</span><span class="n">x</span><span class="p">,</span><span class="n">catch1</span><span class="p">,</span><span class="n">catch2</span><span class="p">)]</span>
-    <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">(</span><span class="n">ranges</span><span class="p">):</span>
-      <span class="k">yield</span> <span class="n">score</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span><span class="n">best</span><span class="p">,</span><span class="n">rest</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">think</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Data</span><span class="p">):</span>
+  <span class="n">rows</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rows</span> <span class="o">=</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">rows</span><span class="p">)</span>
+  <span class="n">xy</span><span class="p">,</span><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">label</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">[:</span><span class="n">the</span><span class="o">.</span><span class="n">Budget</span><span class="p">]],</span> <span class="n">rows</span><span class="p">[</span><span class="n">the</span><span class="o">.</span><span class="n">Budget</span><span class="p">:]</span>
+  <span class="n">xy</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">disty</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">r</span><span class="p">))</span>
+  <span class="n">cut</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">Budget</span><span class="o">**</span><span class="mf">.5</span><span class="p">)</span>
+  <span class="n">best</span><span class="p">,</span><span class="n">rest</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[:</span><span class="n">cut</span><span class="p">],</span> <span class="n">xy</span><span class="p">[</span><span class="n">cut</span><span class="p">:]</span>
+  <span class="n">ranges</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">x</span><span class="p">:</span> 
+    <span class="n">catch1</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">nums</span> <span class="k">else</span> <span class="p">{}</span>
+    <span class="n">catch2</span> <span class="o">=</span> <span class="p">[]</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">nums</span> <span class="k">else</span> <span class="p">{}</span>
+    <span class="p">[</span><span class="n">add</span><span class="p">(</span><span class="n">catch1</span><span class="p">,</span><span class="n">row</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">best</span><span class="p">]</span>
+    <span class="p">[</span><span class="n">add</span><span class="p">(</span><span class="n">catch2</span><span class="p">,</span><span class="n">row</span><span class="p">[</span><span class="n">x</span><span class="p">])</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rest</span><span class="p">]</span>
+    <span class="n">ranges</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">bestNum</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">nums</span> <span class="k">else</span> <span class="n">bestSym</span><span class="p">)(</span>
+               <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">names</span><span class="p">[</span><span class="n">x</span><span class="p">],</span><span class="n">x</span><span class="p">,</span><span class="n">catch1</span><span class="p">,</span><span class="n">catch2</span><span class="p">)]</span>
+  <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">subsets</span><span class="p">(</span><span class="n">ranges</span><span class="p">):</span>
+    <span class="k">yield</span> <span class="n">score</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span><span class="n">best</span><span class="p">,</span><span class="n">rest</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -289,7 +288,7 @@
       <p>Return harmonic mean of recall and false alarm.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span><span class="n">best</span><span class="p">,</span><span class="n">rest</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">score</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span><span class="n">best</span><span class="p">,</span><span class="n">rest</span><span class="p">):</span>
   <span class="n">best1</span>  <span class="o">=</span> <span class="p">[</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">best</span> <span class="k">if</span> <span class="n">selects</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span><span class="n">row</span><span class="p">)]</span>
   <span class="n">rest1</span>  <span class="o">=</span> <span class="p">[</span><span class="n">row</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rest</span> <span class="k">if</span> <span class="n">selects</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span><span class="n">row</span><span class="p">)]</span>
   <span class="n">recall</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">best1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
@@ -306,7 +305,7 @@
       <p>Returns true if rule selects for row.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">selects</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">selects</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span><span class="n">row</span><span class="p">):</span>
   <span class="k">return</span> <span class="nb">all</span><span class="p">(</span><span class="n">select</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">x</span><span class="p">,(</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">)</span> <span class="ow">in</span> <span class="n">rule</span><span class="p">)</span></pre></div>
     </div>
   </div>
@@ -319,7 +318,7 @@
       <p>Returns true if range selects for row.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">select</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">):</span>
   <span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="o">:=</span><span class="n">row</span><span class="p">[</span><span class="n">x</span><span class="p">])</span><span class="o">==</span><span class="s2">&quot;?&quot;</span><span class="p">:</span> <span class="k">return</span> <span class="kc">True</span>
   <span class="k">return</span> <span class="n">lo</span> <span class="o">&lt;=</span> <span class="n">v</span> <span class="o">&lt;=</span> <span class="n">hi</span></pre></div>
     </div>
@@ -345,7 +344,7 @@
       <p>Best range of y values to best point.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">disty</span><span class="p">(</span><span class="n">data</span><span class="p">:</span><span class="n">Data</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">Row</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">disty</span><span class="p">(</span><span class="n">data</span><span class="p">:</span><span class="n">Data</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span><span class="n">Row</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
   <span class="n">d</span><span class="p">,</span><span class="n">n</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">0</span>
   <span class="k">for</span> <span class="n">c</span><span class="p">,</span><span class="n">best</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="n">lo</span><span class="p">,</span><span class="n">hi</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">nums</span><span class="p">[</span><span class="n">c</span><span class="p">]</span>
@@ -375,7 +374,7 @@
       <p>Shuffle a list, in place</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">shuffle</span><span class="p">(</span><span class="n">lst</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">shuffle</span><span class="p">(</span><span class="n">lst</span><span class="p">:</span><span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
   <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">lst</span><span class="p">);</span> <span class="k">return</span> <span class="n">lst</span>
 <span class="n">Maybe</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;True&#39;</span> <span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span> <span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">,</span>
        <span class="s1">&#39;False&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span><span class="s1">&#39;false&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span><span class="s1">&#39;N&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span><span class="s1">&#39;n&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">}</span></pre></div>
@@ -390,7 +389,7 @@
       <p>Coerce a string to int, float, bool, or trimmed string</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">coerce</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Atom</span><span class="p">:</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">coerce</span><span class="p">(</span><span class="n">s</span><span class="p">:</span><span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Atom</span><span class="p">:</span>
   <span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">]:</span>
     <span class="k">try</span><span class="p">:</span> <span class="k">return</span> <span class="n">fn</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">_</span><span class="p">:</span> <span class="k">pass</span>
@@ -407,7 +406,7 @@
       <p>Returns rows of a csv file.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">csv</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Row</span><span class="p">]:</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">csv</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Row</span><span class="p">]:</span>
   <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
       <span class="k">if</span> <span class="p">(</span><span class="n">line</span> <span class="o">:=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;%&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
@@ -423,7 +422,7 @@
       <p>Return average.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">mid</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> 
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">mid</span><span class="p">(</span><span class="n">a</span><span class="p">):</span> 
   <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span></pre></div>
     </div>
   </div>
@@ -436,7 +435,7 @@
       <p>Return standard deviation.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">stdev</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">stdev</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
   <span class="n">l</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
   <span class="k">if</span> <span class="n">l</span><span class="o">&lt;</span><span class="mi">2</span> <span class="p">:</span>          <span class="k">return</span> <span class="mi">0</span>
   <span class="k">if</span> <span class="n">l</span><span class="o">&lt;</span><span class="mi">4</span> <span class="p">:</span>          <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">4</span>
@@ -453,7 +452,7 @@
       <p>Return all subsets of xs.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">subsets</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">subsets</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
   <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">:</span> <span class="n">out</span> <span class="o">+=</span> <span class="p">[</span><span class="n">s</span><span class="o">+</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">out</span><span class="p">]</span> <span class="o">+</span> <span class="p">[[</span><span class="n">x</span><span class="p">]]</span>
   <span class="k">return</span> <span class="n">out</span></pre></div>
@@ -468,7 +467,7 @@
       <p>Increment dictionaries or lists with x.</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
   <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s2">&quot;?&quot;</span><span class="p">:</span>
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">col</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span> <span class="n">col</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">col</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span> <span class="n">col</span> <span class="o">+=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span></pre></div>
@@ -483,7 +482,7 @@
       <p>Returns number of points &lt;= x (if inclusive) or &lt; x (otherwise).</p>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">chop</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">chop</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
   <span class="n">l</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
   <span class="k">while</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="n">r</span><span class="p">:</span>
     <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span> <span class="o">+</span> <span class="n">r</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
@@ -501,7 +500,7 @@
       <h2>Demos</h2>
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg_h</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">eg_h</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -513,7 +512,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg__the</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="n">the</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">eg__the</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="n">the</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -525,7 +524,7 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg__data</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="n">Data</span><span class="p">(</span><span class="n">csv</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">file</span><span class="p">))</span><span class="o">.</span><span class="n">cols</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">eg__data</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="n">Data</span><span class="p">(</span><span class="n">csv</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">file</span><span class="p">))</span><span class="o">.</span><span class="n">cols</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -537,9 +536,11 @@
       
     </div>
     <div class='code'>
-      <div class="highlight"><pre><span class="k">def</span> <span class="nf">eg__think</span><span class="p">():</span>
-  <span class="k">for</span> <span class="n">g</span><span class="p">,</span><span class="n">rule</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">think</span><span class="p">(</span><span class="n">Data</span><span class="p">(</span><span class="n">csv</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">file</span><span class="p">)))):</span> 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">g</span><span class="si">:</span><span class="s2">3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">rule</span><span class="p">)</span></pre></div>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">eg__think</span><span class="p">():</span>
+  <span class="n">data</span> <span class="o">=</span> <span class="n">Data</span><span class="p">(</span><span class="n">csv</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">file</span><span class="p">))</span>
+  <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">g</span><span class="p">,</span><span class="n">rule</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">think</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+      <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">g</span><span class="si">:</span><span class="s2">3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">rule</span><span class="p">)</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>

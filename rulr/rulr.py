@@ -31,13 +31,13 @@ big  = 1e32
 def show(x):
   "pretty print dicts with short float displays and quoted strings"
   match x:
-   case dict():  return "{"+' '.join(f":{k} {show(x[k])}" for k in x)+"}"
-   case float(): return int(x) if x == int(x) else f"{x:.3f}"
-   case str():   return f"'{x}'"
-   case _: return x
+    case dict() : x= "{"+' '.join(f":{k} {show(x[k])}" for k in x)+"}"
+    case float(): x= int(x) if x == int(x) else f"{x:.3f}"
+    case str()  : x= f"'{x}'"
+  return x
 
-# Dictionaries that support x.key.
 class o(dict):
+  "Dictionaries that support x.key."
   __getattr__ = dict.__getitem__
   __setattr__ = dict.__setitem__
   __repr__    = show
