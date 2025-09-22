@@ -30,11 +30,14 @@ rulr.py: fast rule learning
     
 Options:
     
+    
     -h             show help   
     -B Budget=30   when growing theory, how many labels?      
-    -C Check=5     budget for checking learned model   
     -F Few=64      sample size of data random sampling     
+    -b bins=20     divisions of numerics (max-min)/b
+    -d delta=0.35  Cohen's delta. ignore deltas less than d*sd
     -p p=2         distance coeffecient   
+    -r repeats=10  loop counter for rule generation
     -s seed=1701   random number seed      
     -f file=../../moot/optimize/misc/auto93.csv  data file   
 ```
