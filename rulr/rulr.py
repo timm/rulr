@@ -9,7 +9,9 @@ Options:
     
     -h             show help   
     -B Budget=30   when growing theory, how many labels?      
+    -D Dull=0.01   when remaining mass dull, extend ranges 
     -F Few=64      sample size of data random sampling     
+    -T Top=12      max number of subsets to explore 
     -b bins=20     divisions of numerics (max-min)/b
     -d delta=0.35  Cohen's delta. ignore deltas less than d*sd
     -p p=2         distance coeffecient   
@@ -19,7 +21,7 @@ Options:
    
 """
 from typing import Iterator, Iterable, Any
-import random, time, math, sys, re
+import traceback, random, time, math, sys, re
    
 sys.dont_write_bytecode = True
    
@@ -90,9 +92,19 @@ def bestNum(name:str, x:int, good:list[Qty], bad:list[Qty]) -> tuple:
     for j in range(i+1, len(steps)):
       x1, x2 = steps[i], steps[j]
       if x2 - x1 >= the.delta * sd:
+        x1, x2 = tail_extend(all_vals, x1, x2)
         delta = mass(good, x1, x2, n1) - mass(bad, x1, x2, n2)
         if delta > best: best, out = delta, (x1, x2)
   return round(best, 3), name, x, out
+
+def tail_extend(xs:list[Qty], x1:float, x2:float):
+  "Extend x1,x2 to -inf,+inf if tails are below threshold."
+  n = len(xs)
+  left  = chop(xs, x1) / n
+  right = (n - chop(xs, x2, True)) / n
+  if left  < the.Dull: x1 = -big
+  if right < the.Dull: x2 =  big
+  return x1, x2
 
 def bestSym(name,x,dict1: dict[str,int], dict2: dict[str,int]): 
   "Find the value that most selects for dict1 and least selects for dict2."
@@ -105,6 +117,8 @@ def think(data: Data) -> Iterator[tuple]:
   "Generate scored rules from labeled data."
   best, rest = bestRest(data)
   ranges = [makeRange(data, col, best, rest) for col in data.cols.x]
+  ranges = sorted(ranges)[-the.Top:]
+  print(ranges)
   for rule in subsets(ranges):
     yield score(rule, best, rest)
 
@@ -230,8 +244,10 @@ the = o(**{k:coerce(v) for k,v in re.findall(r"(\w+)=(\S+)",__doc__)})
 def rulrMain(settings, funs):
   for n,s in enumerate(sys.argv):
    if (fn := funs.get(f"eg{s.replace('-', '_')}")):
-     random.seed(settings.seed)
-     fn()
+     try: 
+       random.seed(settings.seed); fn()
+     except Exception as e: 
+       print("Error:", e); traceback.print_exc()
    else:
      for key in settings:
        if s=="-"+key[0]: 
